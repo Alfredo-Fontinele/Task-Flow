@@ -1,5 +1,5 @@
+import { TodoStatusEnum } from '@/application/entities/task/task.entity'
 import { PartialType } from '@nestjs/mapped-types'
-import { TodoStatus } from '@prisma/client'
 import { IsEnum, IsString } from 'class-validator'
 
 export class CreateTaskDTO {
@@ -8,9 +8,12 @@ export class CreateTaskDTO {
 
   @IsString()
   description: string
+
+  @IsEnum(TodoStatusEnum)
+  user_id: TodoStatusEnum
 }
 
 export class UpdateTaskDTO extends PartialType(CreateTaskDTO) {
-  @IsEnum(TodoStatus)
-  status: string
+  @IsEnum(TodoStatusEnum)
+  status: TodoStatusEnum
 }

@@ -4,7 +4,7 @@ import { UserRepository } from '@/application/repositories/user-repository'
 export class InMemoryUserRepository implements UserRepository {
   public users: User[] = []
   async create(user: User): Promise<User> {
-    await this.users.push(user)
+    this.users.push(user)
     return user
   }
 
@@ -20,7 +20,7 @@ export class InMemoryUserRepository implements UserRepository {
     return userFound
   }
 
-  async update(user: User, id: string): Promise<User> {
+  async update(id: string, user: User): Promise<User> {
     const index = this.users.findIndex((user) => user.id === id)
     this.users[index] = user
     user.props.updated_at = new Date()

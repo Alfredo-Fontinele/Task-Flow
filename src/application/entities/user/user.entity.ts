@@ -1,6 +1,6 @@
 import { Entity } from '@/core/domain/Entity'
 
-interface UserProps {
+export interface UserProps {
   name: string
   email: string
   created_at?: Date

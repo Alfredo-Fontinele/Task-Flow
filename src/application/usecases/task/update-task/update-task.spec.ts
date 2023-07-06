@@ -9,7 +9,14 @@ describe('Use Case | Update Task', () => {
 
     const task = makeTask()
     await taskRepository.create(task)
-    const taskUpdated = await updateTask.execute({ task })
+    const taskUpdated = await updateTask.execute(
+      {
+        title: 'task-updated-title',
+        description: 'task-updated-description',
+        status: 'done',
+      },
+      task.id,
+    )
 
     expect(taskUpdated.props).toHaveProperty('updated_at')
     expect(taskUpdated.props.updated_at).toStrictEqual(expect.any(Date))

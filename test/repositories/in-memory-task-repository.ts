@@ -21,7 +21,7 @@ export class InMemoryTaskRepository implements TaskRepository {
     return taskFound
   }
 
-  async update(task: Task, id: string): Promise<Task> {
+  async update(id: string, task: Task): Promise<Task> {
     const index = this.tasks.findIndex((task) => task.id === id)
     this.tasks[index] = task
     task.props.updated_at = new Date()

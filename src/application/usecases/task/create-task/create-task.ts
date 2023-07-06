@@ -18,6 +18,7 @@ export class CreateTask {
     const task = new Task({
       title: request.title,
       description: request.description,
+      status: 'todo',
       user_id: request.user_id,
     })
     return await this.taskRepository.create(task)

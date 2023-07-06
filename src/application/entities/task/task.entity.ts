@@ -1,12 +1,18 @@
 import { Entity } from '@/core/domain/Entity'
 
-export type TodoStatus = 'todo' | 'doing' | 'done'
+export type TodoStatusType = 'todo' | 'doing' | 'done'
+
+export enum TodoStatusEnum {
+  todo = 'todo',
+  doing = 'doing',
+  done = 'done',
+}
 
 export interface TaskProps {
   title: string
   description: string
   user_id: string
-  status?: TodoStatus
+  status: TodoStatusType
   created_at?: Date
   updated_at?: Date
 }
@@ -23,7 +29,7 @@ export class Task extends Entity<TaskProps> {
     )
   }
 
-  updateStatus(status: TodoStatus) {
+  updateStatus(status: TodoStatusType) {
     this.props.status = status
     this.props.updated_at = new Date()
   }

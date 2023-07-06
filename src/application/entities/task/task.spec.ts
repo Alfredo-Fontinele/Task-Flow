@@ -12,6 +12,7 @@ describe('Entity Case | Task', () => {
         new Task({
           title: 'task',
           description: 'nova task',
+          status: 'todo',
           user_id: user.id,
         }),
     ).toBeTruthy()

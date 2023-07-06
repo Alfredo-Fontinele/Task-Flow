@@ -1,11 +1,9 @@
-import { Task } from '@/application/entities/task/task.entity'
+import { Task, TaskProps } from '@/application/entities/task/task.entity'
 import { TaskRepository } from '@/application/repositories/task-repository'
 import { Injectable } from '@nestjs/common'
 import { TaskNotFound } from '../../error/task-not-found'
 
-interface UpdateTaskRequest {
-  task: Task
-}
+type UpdateTaskRequest = Partial<TaskProps>
 
 type UpdateTaskResponse = Task
 
@@ -13,12 +11,21 @@ type UpdateTaskResponse = Task
 export class UpdateTask {
   constructor(private taskRepository: TaskRepository) {}
 
-  async execute(request: UpdateTaskRequest): Promise<UpdateTaskResponse> {
-    const { task } = request
-    const taskFound = await this.taskRepository.findOne(task.id)
+  async execute(
+    request: UpdateTaskRequest,
+    id: string,
+  ): Promise<UpdateTaskResponse> {
+    const taskFound = await this.taskRepository.findOne(id)
     if (!taskFound) {
       throw new TaskNotFound()
     }
-    return await this.taskRepository.update(task, task.id)
+    const updatedTask = new Task(
+      {
+        ...taskFound.props,
+        ...request,
+      },
+      id,
+    )
+    return await this.taskRepository.update(id, updatedTask)
   }
 }

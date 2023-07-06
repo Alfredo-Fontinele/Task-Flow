@@ -7,6 +7,7 @@ export const makeTask = (task: MakeTaskProps = {}) => {
     title: 'new-task-fake',
     description: 'task-description-fake',
     user_id: 'fake-user-id',
+    status: 'todo',
     ...task,
   })
 }

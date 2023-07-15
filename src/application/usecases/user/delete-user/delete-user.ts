@@ -13,11 +13,10 @@ export class DeleteUser {
   constructor(private userRepository: UserRepository) {}
 
   async execute(request: DeleteUserRequest): Promise<DeleteUserResponse> {
-    const { user_id } = request
-    const existUser = await this.userRepository.findOne(user_id)
+    const existUser = await this.userRepository.findOne(request.user_id)
     if (!existUser) {
       throw new UserNotFound()
     }
-    await this.userRepository.delete(user_id)
+    await this.userRepository.delete(existUser.id)
   }
 }

@@ -1,0 +1,6 @@
+node_modules
+data
+.github
+dist
+.env.example
+pnpm-lock.yaml

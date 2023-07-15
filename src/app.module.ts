@@ -4,6 +4,6 @@ import { DatabaseModule } from './infra/database/database.module'
 import { HttpModule } from './infra/http/http.module'
 
 @Module({
-  imports: [HttpModule, DatabaseModule, ConfigModule.forRoot()],
+  imports: [ConfigModule.forRoot(), HttpModule, DatabaseModule],
 })
 export class AppModule {}

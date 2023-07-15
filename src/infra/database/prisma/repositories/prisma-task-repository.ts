@@ -1,5 +1,6 @@
 import { Task } from '@/application/entities/task/task.entity'
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
+import { Task as TaskModel } from '@prisma/client'
 import { PrismaMapperTask } from '../mappers/prisma-mapper-task'
 import { PrismaService } from '../prisma.service'
 
@@ -13,28 +14,44 @@ export class PrismaTaskRepository {
       data: {
         description: raw.description,
         title: raw.title,
-        status: 'doing',
+        status: task.props.status,
         userId: task.props.user_id,
       },
     })
     return PrismaMapperTask.toDomain(newTask)
   }
 
-  async findAll(): Promise<Task[]> {
-    const Tasks = await this.prismaService.task.findMany()
-    return Tasks.map(PrismaMapperTask.toDomain)
+  async findAll(): Promise<TaskModel[]> {
+    return await this.prismaService.task.findMany({
+      include: {
+        user: true,
+      },
+    })
   }
 
   async findOne(id: string): Promise<Task> {
-    const Task = await this.prismaService.task.findFirst({
+    const task = await this.prismaService.task.findFirst({
       where: {
         id,
       },
     })
-    if (!Task) {
-      throw new Error('Task not found')
+    if (!task) {
+      throw new NotFoundException('task not found')
     }
-    return PrismaMapperTask.toDomain(Task)
+    return PrismaMapperTask.toDomain(task)
+  }
+
+  async findOneByTitle(title: string): Promise<boolean> {
+    const task = await this.prismaService.task.findFirst({
+      where: {
+        title,
+      },
+    })
+    if (task) {
+      return true
+      throw new NotFoundException('task already exist by title')
+    }
+    return false
   }
 
   async update(Task: Task, id: string): Promise<Task> {

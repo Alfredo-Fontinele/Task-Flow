@@ -20,6 +20,14 @@ export class InMemoryUserRepository implements UserRepository {
     return userFound
   }
 
+  async findOneByEmail(email: string): Promise<boolean> {
+    const userFound = this.users.find((user) => user.props.email === email)
+    if (userFound) {
+      return true
+    }
+    return false
+  }
+
   async update(id: string, user: User): Promise<User> {
     const index = this.users.findIndex((user) => user.id === id)
     this.users[index] = user

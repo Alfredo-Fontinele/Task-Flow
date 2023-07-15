@@ -9,8 +9,8 @@ export class CreateTaskDTO {
   @IsString()
   description: string
 
-  @IsEnum(TodoStatusEnum)
-  user_id: TodoStatusEnum
+  @IsString()
+  user_id: string
 }
 
 export class UpdateTaskDTO extends PartialType(CreateTaskDTO) {

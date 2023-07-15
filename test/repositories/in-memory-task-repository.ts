@@ -21,6 +21,14 @@ export class InMemoryTaskRepository implements TaskRepository {
     return taskFound
   }
 
+  async findOneByTitle(title: string): Promise<boolean> {
+    const taskFound = this.tasks.find((task) => task.props.title === title)
+    if (taskFound) {
+      return true
+    }
+    return false
+  }
+
   async update(id: string, task: Task): Promise<Task> {
     const index = this.tasks.findIndex((task) => task.id === id)
     this.tasks[index] = task

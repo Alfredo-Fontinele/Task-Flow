@@ -6,6 +6,7 @@ import { DeleteUser } from '@/application/usecases/user/delete-user/delete-user'
 import { UpdateUser } from '@/application/usecases/user/update-user/update-user'
 import { Module } from '@nestjs/common'
 import { DatabaseModule } from '../database/database.module'
+import { PrismaService } from '../database/prisma/prisma.service'
 import { TaskController } from './controllers/task.controller'
 import { UserController } from './controllers/user.controller'
 
@@ -13,6 +14,7 @@ import { UserController } from './controllers/user.controller'
   imports: [DatabaseModule],
   controllers: [TaskController, UserController],
   providers: [
+    PrismaService,
     CreateTask,
     UpdateTask,
     DeleteTask,

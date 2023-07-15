@@ -1,17 +1,32 @@
+import { UserRepository } from '@/application/repositories/user-repository'
 import { CreateUser } from '@/application/usecases/user/create-user/create-user'
 import { DeleteUser } from '@/application/usecases/user/delete-user/delete-user'
 import { UpdateUser } from '@/application/usecases/user/update-user/update-user'
-import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common'
 import { CreateUserDTO, UpdateUserDTO } from '../dtos/users.dto'
 import { UserMapper, UserMapperResponse } from '../mappers/user-mapper'
 
 @Controller('users')
 export class UserController {
   constructor(
+    private userRepository: UserRepository,
     private createUser: CreateUser,
     private updateUser: UpdateUser,
     private deleteUser: DeleteUser,
   ) {}
+
+  @Get()
+  async findAll() {
+    return await this.userRepository.findAll()
+  }
 
   @Post()
   async create(@Body() payload: CreateUserDTO): Promise<UserMapperResponse> {

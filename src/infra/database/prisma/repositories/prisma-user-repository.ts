@@ -1,11 +1,20 @@
 import { User } from '@/application/entities/user/user.entity'
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
+import { User as UserModel } from '@prisma/client'
 import { PrismaMapperUser } from '../mappers/prisma-mapper-user'
 import { PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaUserRepository {
   constructor(private prismaService: PrismaService) {}
+
+  async findAll(): Promise<UserModel[]> {
+    return await this.prismaService.user.findMany({
+      include: {
+        task: true,
+      },
+    })
+  }
 
   async create(user: User): Promise<User> {
     const raw = PrismaMapperUser.toPrisma(user)
@@ -15,11 +24,6 @@ export class PrismaUserRepository {
     return PrismaMapperUser.toDomain(newUser)
   }
 
-  async findAll(): Promise<User[]> {
-    const users = await this.prismaService.user.findMany()
-    return users.map(PrismaMapperUser.toDomain)
-  }
-
   async findOne(id: string): Promise<User> {
     const user = await this.prismaService.user.findFirst({
       where: {
@@ -27,9 +31,22 @@ export class PrismaUserRepository {
       },
     })
     if (!user) {
-      throw new Error('user not found')
+      throw new NotFoundException('user not found')
     }
     return PrismaMapperUser.toDomain(user)
+  }
+
+  async findOneByEmail(email: string): Promise<boolean> {
+    const user = await this.prismaService.user.findFirst({
+      where: {
+        email,
+      },
+    })
+    if (user) {
+      return true
+      throw new NotFoundException('user already exist by email')
+    }
+    return false
   }
 
   async update(user: User, id: string): Promise<User> {

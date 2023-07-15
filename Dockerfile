@@ -2,10 +2,10 @@ FROM node:18-alpine
 
 WORKDIR /usr/home/app
 
-COPY package*.json .
+COPY . .
 
-RUN npm install pnpm && pnpm install
+RUN npm install 
 
 COPY . .
 
-RUN pnpm build
+RUN npm run build

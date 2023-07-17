@@ -49,7 +49,6 @@ export class PrismaTaskRepository {
     })
     if (task) {
       return true
-      throw new NotFoundException('task already exist by title')
     }
     return false
   }

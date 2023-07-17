@@ -44,7 +44,6 @@ export class PrismaUserRepository {
     })
     if (user) {
       return true
-      throw new NotFoundException('user already exist by email')
     }
     return false
   }

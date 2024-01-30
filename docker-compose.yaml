@@ -1,33 +1,22 @@
-version: '3.8'
+version: "3.9"
 
 services:
-  db:
-    image: postgres
-    container_name: db-task-flow
-    restart: always
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    ports:
+      - "5433:5432"
     env_file:
       - .env
-    ports:
-      - 5434:5432
-    volumes:
-      - ./data/db_data:/var/lib/postgresql/data
 
   api:
+    container_name: backend
+    depends_on:
+      - postgres
     build:
       context: .
-    restart: always
-    container_name: api-task-flow
+    ports:
+      - "3333:3333"
     env_file:
       - .env
-    ports:
-      - ${PORT}:${PORT}
-    depends_on:
-      - db
-    command: 'npx prisma migrate dev && npm start:dev'
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-
-volumes:
-  db:
-    name: nest-prisma-docker-db
+    command: sh -c "npx prisma migrate dev && npm run build && npm run start:prod"

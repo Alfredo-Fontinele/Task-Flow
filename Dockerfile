@@ -1,11 +1,11 @@
-FROM node:18-alpine
+FROM node:18-slim
 
-WORKDIR /usr/home/app
+RUN apt-get update -y \
+    && apt-get install -y openssl \
+    && apt-get clean
+
+WORKDIR /home/app/server
 
 COPY . .
 
-RUN npm install 
-
-COPY . .
-
-RUN npm run build
+RUN npm install && npx prisma generate
